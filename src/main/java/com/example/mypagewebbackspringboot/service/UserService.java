@@ -14,17 +14,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 
-
-
-
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+
 import java.io.UnsupportedEncodingException;
 
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
 
 
 import java.util.Iterator;
@@ -92,7 +89,8 @@ public class UserService {
 
 
         //Cuerpo del correo
-        String mailContent = "<h4> My email is for contact:  " + message.getEmailAddress() + ", </h4>";
+        String mailContent = "<h3> My name is:  " + message.getName() + ", </h4> <br>" +
+                "<h4> My email is for contact:  " + message.getEmailAddress() + ", </h4>";
         mailContent += "<h4> " + message.getMessage() + ", </h4>";
 
 
@@ -104,9 +102,8 @@ public class UserService {
         MimeMessageHelper helper = new MimeMessageHelper(messagee);
 
 
-
         helper.setText("<h1>Hola</h1>", true);
-      //  helper.setFrom("DASkIND@GMAIL.COM", "DASkIND");
+        //  helper.setFrom("DASkIND@GMAIL.COM", "DASkIND");
         helper.setTo("diegomauricio15@hotmail.com");
         helper.setSubject(message.getSubject());
         helper.setText(mailContent, true);

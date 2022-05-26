@@ -5,13 +5,14 @@ import com.example.mypagewebbackspringboot.entity.Message;
 import com.example.mypagewebbackspringboot.mail.MessageSend;
 import com.example.mypagewebbackspringboot.service.UserService;
 
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-
 
 
 import javax.mail.MessagingException;
@@ -23,11 +24,14 @@ import javax.validation.Valid;
 @RequestMapping("/api")
 public class UserController {
 
+    private static final Logger LG = LoggerFactory.getLogger(UserController.class);
+
 
     @Autowired
     private UserService userService;
 
 
+    @Autowired
     private MessageSend message;
 
 
@@ -41,16 +45,12 @@ public class UserController {
 
     }
 
-    //Method send email
-    @PostMapping("/menssage")
-    public void sendEmail(@RequestBody @Valid Message message)
-            throws MessagingException, UnsupportedEncodingException{
 
+    @PostMapping("/message")
+    public void sendEmail(@RequestBody @Valid Message message,
+                          BindingResult bindingResult)
+            throws MessagingException, UnsupportedEncodingException {
 
-
-
-
-        System.out.println(message.toString());
 
         userService.send(message);
 
