@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,5 +20,25 @@ public class User implements Serializable {
 
     @Column(name = "username", nullable = false)
     private String username;
+
+
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_role"))
+        private List<Role> roles;
+
+    //constructor
+    public User(String username) {
+        this.username = username;
+
+    }
+
+
+
+
+    public User() {
+    }
 
 }
