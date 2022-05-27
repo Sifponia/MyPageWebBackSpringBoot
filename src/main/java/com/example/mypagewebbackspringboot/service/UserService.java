@@ -1,7 +1,7 @@
 package com.example.mypagewebbackspringboot.service;
 
 import com.example.mypagewebbackspringboot.entity.Message;
-import com.example.mypagewebbackspringboot.entity.User;
+import com.example.mypagewebbackspringboot.entity.Users;
 import com.example.mypagewebbackspringboot.repository.UserRepository;
 import com.example.mypagewebbackspringboot.tdo.UserDTO;
 import com.example.mypagewebbackspringboot.tdo.UserQueryVO;
@@ -24,7 +24,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,14 +34,14 @@ public class UserService {
     private UserRepository userRepository;
 
 
-    public List<User> allUser() {
+    public List<Users> allUser() {
         UserVO userVO = new UserVO();
         userVO.setUsers(userRepository.findAll());
         return userVO.getUsers();
     }
 
     public Long save(UserVO vO) {
-        User bean = new User();
+        Users bean = new Users();
         BeanUtils.copyProperties(vO, bean);
         bean = userRepository.save(bean);
         return bean.getIdUser();
@@ -53,13 +52,13 @@ public class UserService {
     }
 
     public void update(Long id, UserUpdateVO vO) {
-        User bean = requireOne(id);
+        Users bean = requireOne(id);
         BeanUtils.copyProperties(vO, bean);
         userRepository.save(bean);
     }
 
     public UserDTO getById(Long id) {
-        User original = requireOne(id);
+        Users original = requireOne(id);
         return toDTO(original);
     }
 
@@ -67,13 +66,13 @@ public class UserService {
         throw new UnsupportedOperationException();
     }
 
-    private UserDTO toDTO(User original) {
+    private UserDTO toDTO(Users original) {
         UserDTO bean = new UserDTO();
         BeanUtils.copyProperties(original, bean);
         return bean;
     }
 
-    private User requireOne(Long id) {
+    private Users requireOne(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
     }

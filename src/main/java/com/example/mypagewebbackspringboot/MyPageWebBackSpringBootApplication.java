@@ -1,9 +1,10 @@
 package com.example.mypagewebbackspringboot;
 
-import com.example.mypagewebbackspringboot.entity.User;
 import com.example.mypagewebbackspringboot.repository.UserRepository;
 import com.example.mypagewebbackspringboot.service.UserService;
 import com.example.mypagewebbackspringboot.tdo.UserVO;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,21 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
 @SpringBootApplication
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+
+//@ComponentScan("com.example.mypagewebbackspringboot.repository")
+
+
 public class MyPageWebBackSpringBootApplication implements CommandLineRunner {
 
     @Autowired
     private UserService userService;
 
+
+    @Autowired
+    private UserRepository userRepository;
 
     private static final Logger LOG =
             LoggerFactory.getLogger(MyPageWebBackSpringBootApplication.class);
@@ -30,7 +40,7 @@ public class MyPageWebBackSpringBootApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         //Method insert user
-        // insert();
+        //insert("user2");
 
 
         //Method delete user
@@ -43,13 +53,23 @@ public class MyPageWebBackSpringBootApplication implements CommandLineRunner {
 
 
     //Method insert user
-    public void insert() {
+    public void insert(String name) {
 
-        UserVO user = new UserVO();
-        user.setUsername("Sifponia194");
-        Long userId = userService.save(user);
+        try {
 
-        LOG.info("User id: " + userId);
+
+            UserVO user = new UserVO();
+            user.setUsername(name);
+            Long userId = userService.save(user);
+
+            LOG.info("Users id: " + userId);
+
+            allUser();
+
+        } catch (Exception dsa) {
+            LOG.error(" >>>>>>>>>>>  DataBindingException: ", dsa.getMessage());
+        }
+
 
     }
 
@@ -60,7 +80,7 @@ public class MyPageWebBackSpringBootApplication implements CommandLineRunner {
         Long userId = 2L;
         userService.delete(userId);
 
-        LOG.info("User deleted id: ", userId);
+        LOG.info("Users deleted id: ", userId);
 
     }
 
@@ -70,6 +90,16 @@ public class MyPageWebBackSpringBootApplication implements CommandLineRunner {
 
         userService.allUser().forEach(System.out::println);
 
+    }
+
+
+    //Method delete user
+    public void deleteUser(Long userId) {
+
+        userId = 2L;
+        userService.delete(userId);
+
+        LOG.info("Users deleted id: ", userId);
 
     }
 }
